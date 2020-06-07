@@ -19,8 +19,9 @@ var min = d3.min(words.map(function(word) {
 var layout = cloud()
   .size([window.innerWidth, window.innerHeight])
   .words(words)
-  .font("Impact")
-  .fontSize(function(d) { return (d.size / 1.5); })
+  .font("Impact, AvenirNext-Bold, sans-serif")
+  .padding(3)
+  .fontSize(function(d) { return (d.size / 2); })
   .on("end", draw);
 
 layout.start();
@@ -35,7 +36,7 @@ function draw(words) {
     .data(words)
     .enter().append("text")
     .style("font-size", function(d) { return d.size + "px"; })
-    .style("font-family", "Impact")
+    .style("font-family", "Impact, AvenirNext-Bold, sans-serif")
     .style("fill", function(d) { return d3.interpolateWarm((d.size - min) / (max - min))})
     .attr("text-anchor", "middle")
     .attr("transform", function(d) {
