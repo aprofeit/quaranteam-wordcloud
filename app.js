@@ -17,9 +17,8 @@ var min = d3.min(words.map(function(word) {
 }));
 
 var layout = cloud()
-  .size([1400, 800])
+  .size([window.innerWidth, window.innerHeight])
   .words(words)
-  .padding(5)
   .font("Impact")
   .fontSize(function(d) { return (d.size / 1.5); })
   .on("end", draw);
