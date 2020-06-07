@@ -1,0 +1,14 @@
+{
+  "name": "wordcloud",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Alexander Profeit <alex@profeit.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "brfs": "^2.0.2",
+    "d3": "^5.16.0",
+    "d3-cloud": "^1.2.5",
+    "fs": "^0.0.1-security"
+  }
+}
