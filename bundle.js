@@ -23,6 +23,8 @@ var layout = cloud()
 
 layout.start();
 
+const theme = "interpolateWarm";
+
 function draw(words) {
   d3.select("body").append("svg")
     .attr("width", layout.size()[0])
@@ -34,7 +36,7 @@ function draw(words) {
     .enter().append("text")
     .style("font-size", function(d) { return d.size + "px"; })
     .style("font-family", "Impact")
-    .style("fill", function(d) { return d3.interpolateOrRd(d.size / max)})
+    .style("fill", function(d) { return d3.interpolateWarm(d.size / max)})
     .attr("text-anchor", "middle")
     .attr("transform", function(d) {
       return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
