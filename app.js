@@ -21,7 +21,7 @@ var layout = cloud()
   .words(words)
   .font("Impact, AvenirNext-Bold, sans-serif")
   .padding(3)
-  .fontSize(function(d) { return (d.size / 2); })
+  .fontSize(function(d) { return (d.size / 1.5); })
   .on("end", draw);
 
 layout.start();
