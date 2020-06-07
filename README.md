@@ -6,7 +6,7 @@ The ruby script is contained within [`transform.rb`](https://github.com/aprofeit
 
 Depending on the number of message files exported, the [`NUMBER_OF_MESSAGE_FILES`](https://github.com/aprofeit/quaranteam-wordcloud/blob/5d91d80a10829b4761b7b5cf4f8ec2c661c912d7/transform.rb#L3) constant should be adjusted accordingly. The [`WORD_LIMIT`](https://github.com/aprofeit/quaranteam-wordcloud/blob/73ce9be7d833135ddee755be8b30a01c60c21a12/transform.rb#L4) constant can also be adjusted to change the number of words to populate the cloud. 
 
-When the data exists there, the javascript bundle can be built by running `script/build`. Once that is completed you can see the word cloud by opening `index.html` in your browser of choice. 
+When the data is present in `data/message_*.json`, the javascript bundle can be built by running `script/build`. Once that is completed you can see the word cloud by opening `index.html` in your browser of choice. 
 
 # Example output
 
