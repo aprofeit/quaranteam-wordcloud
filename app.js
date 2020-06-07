@@ -12,6 +12,10 @@ var max = d3.max(words.map(function(word) {
   return word.size
 }));
 
+var min = d3.min(words.map(function(word) {
+  return word.size
+}));
+
 var layout = cloud()
   .size([1400, 800])
   .words(words)
@@ -33,7 +37,7 @@ function draw(words) {
     .enter().append("text")
     .style("font-size", function(d) { return d.size + "px"; })
     .style("font-family", "Impact")
-    .style("fill", function(d) { return d3.interpolateWarm(d.size / max)})
+    .style("fill", function(d) { return d3.interpolateWarm((d.size - min) / (max - min))})
     .attr("text-anchor", "middle")
     .attr("transform", function(d) {
       return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
