@@ -1,7 +1,6 @@
 {
   "name": "wordcloud",
   "version": "1.0.0",
-  "main": "index.js",
   "author": "Alexander Profeit <alex@profeit.com>",
   "license": "MIT",
   "private": false,
