@@ -44,7 +44,7 @@ end
 
 words = messages.map do |message|
   message.split.map do |word|
-    word.downcase.tr('.', '').tr('?', '').tr('"', '').sub('’', "'").tr('(', '').tr(')', '').tr('!', '').tr('@', '').tr(',', '')
+    word.downcase.tr('.', '').tr('?', '').tr('"', '').sub('’', "'").tr('(', '').tr(')', '').tr('!', '').tr('@', '').tr(',', '').tr('-', '')
   end.flatten
 end.flatten.reject do |word|
   stop_words.include?(word) || word.include?('http') || word.empty? || word.include?('🍑') || word.include?("😂")
