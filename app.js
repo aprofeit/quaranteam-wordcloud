@@ -2,14 +2,14 @@ var d3 = require("d3");
 var cloud = require("d3-cloud");
 var fs = require("fs");
 
-var file = fs.readFileSync(__dirname + '/data/telegram/top_words.json', 'utf8');
+var file = fs.readFileSync(__dirname + '/data/telegram/stonks/top_words.json', 'utf8');
 
 let drawCloud = function() {
   var width = window.innerWidth
 
   var scaleFactor = d3.scaleSqrt()
     .domain([0, 2000])
-    .range([25, 10])
+    .range([12, 3])
 
   var words = JSON.parse(file).map(function(word) {
     return { text: word[0], size: word[1] / scaleFactor(window.innerWidth + window.innerHeight) }

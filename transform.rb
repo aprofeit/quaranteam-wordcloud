@@ -47,7 +47,7 @@ words = messages.map do |message|
     word.downcase.tr('.', '').tr('?', '').tr('"', '').sub('’', "'").tr('(', '').tr(')', '').tr('!', '').tr('@', '').tr(',', '').tr('-', '')
   end.flatten
 end.flatten.reject do |word|
-  stop_words.include?(word) || word.include?('http') || word.empty? || word.include?('🍑') || word.include?("😂")
+  stop_words.include?(word) || word.include?('http') || word.empty? || word.include?('🍑') || word.include?("😂") || word.include?("📉") || word.include?("📈")
 end.reject do |word|
   %w{1 2 3 4 5 6 7 8 9 10}.include?(word)
 end

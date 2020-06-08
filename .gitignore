@@ -1,3 +1,4 @@
 .DS_Store
 data/messenger/message_*.json
-data/telegram/messages.json
+data/telegram/stonks/messages.json
+data/telegram/wings/messages.json
