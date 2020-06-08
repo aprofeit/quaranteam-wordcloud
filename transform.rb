@@ -2,6 +2,8 @@ require 'json'
 
 NUMBER_OF_MESSAGE_FILES = 6
 WORD_LIMIT = 100
+MESSAGE_FORMAT = ARGV[0]
+DATA_DIR = ARGV[1]
 
 def read_json(filename)
   JSON.parse(File.read(filename))
@@ -15,15 +17,22 @@ stop_words = read_json('data/stopwords.json')['words'].map do |word|
   reencode(word)
 end
 
-words = (1..NUMBER_OF_MESSAGE_FILES).map do |number|
-  JSON.parse(File.read("data/messenger/message_#{number}.json"))['messages'].reject do |message|
-    message['content'].nil?
-  end.sort_by do |message|
-    message['timestamp_ms']
-  end.map do |message|
-    message['content'].encode('iso-8859-1').force_encoding('utf-8')
-  end
-end.flatten.map do |message|
+words = []
+case MESSAGE_FORMAT
+when 'messenger'
+  words = (1..NUMBER_OF_MESSAGE_FILES).map do |number|
+    read_json("#{DATA_DIR}/message_#{number}.json")['messages'].reject do |message|
+      message['content'].nil?
+    end.sort_by do |message|
+      message['timestamp_ms']
+    end.map do |message|
+      message['content'].encode('iso-8859-1').force_encoding('utf-8')
+    end
+  end.flatten
+when 'telegram'
+end
+
+words = words.map do |message|
   message.split.map do |word|
     word.downcase.tr('.', '').tr('?', '').tr('"', '').sub('’', "'").tr('(', '').tr(')', '').tr('!', '').tr('@', '').tr(',', '')
   end.flatten
