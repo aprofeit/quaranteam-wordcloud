@@ -5,54 +5,58 @@ var cloud = require("d3-cloud");
 
 var file = "[[\"lol\",1634],[\"good\",1155],[\"time\",976],[\"haha\",861],[\"fuck\",697],[\"yeah\",666],[\"people\",645],[\"chat\",640],[\"adam\",640],[\"day\",636],[\"shit\",545],[\"video\",535],[\"fucking\",484],[\"love\",481],[\"work\",478],[\"gonna\",465],[\"group\",407],[\"today\",402],[\"night\",394],[\"guys\",386],[\"kit\",376],[\"alexander\",375],[\"profeit\",368],[\"derek\",367],[\"yannis\",360],[\"great\",355],[\"beer\",342],[\"pretty\",323],[\"nice\",320],[\"feel\",308],[\"omg\",304],[\"hours\",303],[\"days\",303],[\"sheldon\",301],[\"alex\",291],[\"melo\",286],[\"bad\",284],[\"long\",281],[\"thought\",281],[\"steph\",280],[\"week\",275],[\"minister\",266],[\"joined\",265],[\"guy\",260],[\"man\",256],[\"big\",253],[\"emily\",250],[\"jeff\",248],[\"drink\",245],[\"lot\",245],[\"life\",244],[\"hahaha\",243],[\"zoom\",233],[\"start\",230],[\"dimitris\",229],[\"ya\",228],[\"wait\",224],[\"eat\",220],[\"fun\",218],[\"year\",217],[\"celina\",217],[\"super\",215],[\"watch\",215],[\"dont\",214],[\"tomorrow\",211],[\"em\",210],[\"sex\",209],[\"cool\",206],[\"guess\",202],[\"march\",201],[\"wow\",201],[\"left\",198],[\"real\",196],[\"set\",194],[\"hard\",193],[\"buy\",193],[\"years\",192],[\"high\",191],[\"yann\",190],[\"wine\",190],[\"pizza\",187],[\"ashley\",186],[\"app\",182],[\"working\",182],[\"times\",182],[\"stuff\",181],[\"dp\",181],[\"making\",181],[\"tonight\",180],[\"food\",179],[\"bed\",179],[\"person\",179],[\"pawsey\",178],[\"friday\",177],[\"drinking\",175],[\"game\",175],[\"cheese\",175],[\"house\",174],[\"yan\",174],[\"watching\",174]]";
 
-var width = window.innerWidth
+let drawCloud = function() {
+  var width = window.innerWidth
 
-var scaleFactor = d3.scaleSqrt()
-  .domain([0, 2000])
-  .range([25, 10])
+  var scaleFactor = d3.scaleSqrt()
+    .domain([0, 2000])
+    .range([25, 10])
 
-console.log(scaleFactor(window.innerWidth));
+  var words = JSON.parse(file).map(function(word) {
+    return { text: word[0], size: word[1] / scaleFactor(window.innerWidth + window.innerHeight) }
+  });
 
-var words = JSON.parse(file).map(function(word) {
-  return { text: word[0], size: word[1] / scaleFactor(window.innerWidth + window.innerHeight) }
-});
+  var max = d3.max(words.map(function(word) {
+    return word.size
+  }));
 
-var max = d3.max(words.map(function(word) {
-  return word.size
-}));
+  var min = d3.min(words.map(function(word) {
+    return word.size
+  }));
 
-var min = d3.min(words.map(function(word) {
-  return word.size
-}));
+  var layout = cloud()
+    .size([window.innerWidth, window.innerHeight])
+    .words(words)
+    .font("Impact, AvenirNext-Bold, sans-serif")
+    .padding(3)
+    .fontSize(function(d) { return d.size; })
+    .on("end", draw);
 
-var layout = cloud()
-  .size([window.innerWidth, window.innerHeight])
-  .words(words)
-  .font("Impact, AvenirNext-Bold, sans-serif")
-  .padding(3)
-  .fontSize(function(d) { return d.size; })
-  .on("end", draw);
+  layout.start();
 
-layout.start();
-
-function draw(words) {
-  d3.select("body").append("svg")
-    .attr("width", layout.size()[0])
-    .attr("height", layout.size()[1])
-    .append("g")
-    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-    .selectAll("text")
-    .data(words)
-    .enter().append("text")
-    .style("font-size", function(d) { return d.size + "px"; })
-    .style("font-family", "Impact, AvenirNext-Bold, sans-serif")
-    .style("fill", function(d) { return d3.interpolateWarm((d.size - min) / (max - min))})
-    .attr("text-anchor", "middle")
-    .attr("transform", function(d) {
-      return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-    })
-    .text(function(d) { return d.text; });
+  function draw(words) {
+    d3.select("body").html("");
+    d3.select("body").append("svg")
+      .attr("width", layout.size()[0])
+      .attr("height", layout.size()[1])
+      .append("g")
+      .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+      .selectAll("text")
+      .data(words)
+      .enter().append("text")
+      .style("font-size", function(d) { return d.size + "px"; })
+      .style("font-family", "Impact, AvenirNext-Bold, sans-serif")
+      .style("fill", function(d) { return d3.interpolateWarm((d.size - min) / (max - min))})
+      .attr("text-anchor", "middle")
+      .attr("transform", function(d) {
+        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+      })
+      .text(function(d) { return d.text; });
+  }
 }
+
+drawCloud();
+window.addEventListener('resize', drawCloud);
 
 },{"d3":34,"d3-cloud":6}],2:[function(require,module,exports){
 // https://d3js.org/d3-array/ v1.2.4 Copyright 2018 Mike Bostock
