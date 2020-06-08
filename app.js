@@ -10,8 +10,6 @@ var scaleFactor = d3.scaleSqrt()
   .domain([0, 2000])
   .range([25, 10])
 
-console.log(scaleFactor(window.innerWidth));
-
 var words = JSON.parse(file).map(function(word) {
   return { text: word[0], size: word[1] / scaleFactor(window.innerWidth + window.innerHeight) }
 });
