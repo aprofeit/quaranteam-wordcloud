@@ -2,7 +2,7 @@ var d3 = require("d3");
 var cloud = require("d3-cloud");
 var fs = require("fs");
 
-var file = fs.readFileSync(__dirname + '/data/messenger/top_words.json', 'utf8');
+var file = fs.readFileSync(__dirname + '/data/telegram/top_words.json', 'utf8');
 
 let drawCloud = function() {
   var width = window.innerWidth
