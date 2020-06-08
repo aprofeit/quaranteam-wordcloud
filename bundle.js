@@ -3,10 +3,18 @@ var d3 = require("d3");
 var cloud = require("d3-cloud");
 
 
-var file = "[[\"lol\",295],[\"good\",245],[\"time\",214],[\"haha\",185],[\"people\",159],[\"fuck\",159],[\"day\",153],[\"yeah\",142],[\"shit\",133],[\"adam\",121],[\"fucking\",101],[\"gonna\",94],[\"love\",93],[\"work\",88],[\"melo\",87],[\"today\",86],[\"feel\",79],[\"beer\",78],[\"eat\",76],[\"great\",76],[\"guy\",75],[\"nice\",75],[\"life\",70],[\"night\",70],[\"pretty\",70],[\"guys\",69],[\"hours\",69],[\"omg\",67],[\"video\",66],[\"dont\",65],[\"lot\",65],[\"derek\",63],[\"steph\",63],[\"big\",62],[\"man\",62],[\"week\",61],[\"mayo\",59],[\"water\",58],[\"alex\",58],[\"kit\",57],[\"ya\",57],[\"year\",57],[\"bad\",57],[\"thought\",56],[\"cool\",56],[\"yannis\",56],[\"group\",55],[\"stuff\",55],[\"drink\",53],[\"long\",53],[\"hot\",50],[\"chat\",49],[\"eating\",49],[\"hahaha\",49],[\"buy\",49],[\"emily\",48],[\"car\",48],[\"watch\",47],[\"wow\",47],[\"bed\",46],[\"house\",46],[\"years\",45],[\"real\",45],[\"zoom\",45],[\"sex\",44],[\"alcohol\",44],[\"amazing\",42],[\"super\",42],[\"place\",42],[\"live\",42],[\"covid\",41],[\"working\",41],[\"set\",41],[\"gotta\",40],[\"weird\",40],[\"start\",40],[\"bit\",39],[\"cops\",39],[\"hard\",39],[\"alexander\",39],[\"wrong\",39],[\"sense\",39],[\"food\",38],[\"fucked\",38],[\"watching\",38],[\"days\",38],[\"vodka\",38],[\"em\",38],[\"sandwich\",38],[\"black\",37],[\"high\",37],[\"left\",37],[\"remember\",36],[\"sleep\",36],[\"times\",36],[\"free\",36],[\"profeit\",35],[\"open\",35],[\"wait\",35],[\"job\",35]]";
+var file = "[[\"lol\",1634],[\"good\",1155],[\"time\",976],[\"haha\",861],[\"fuck\",697],[\"yeah\",666],[\"people\",645],[\"chat\",640],[\"adam\",640],[\"day\",636],[\"shit\",545],[\"video\",535],[\"fucking\",484],[\"love\",481],[\"work\",478],[\"gonna\",465],[\"group\",407],[\"today\",402],[\"night\",394],[\"guys\",386],[\"kit\",376],[\"alexander\",375],[\"profeit\",368],[\"derek\",367],[\"yannis\",360],[\"great\",355],[\"beer\",342],[\"pretty\",323],[\"nice\",320],[\"feel\",308],[\"omg\",304],[\"hours\",303],[\"days\",303],[\"sheldon\",301],[\"alex\",291],[\"melo\",286],[\"bad\",284],[\"long\",281],[\"thought\",281],[\"steph\",280],[\"week\",275],[\"minister\",266],[\"joined\",265],[\"guy\",260],[\"man\",256],[\"big\",253],[\"emily\",250],[\"jeff\",248],[\"drink\",245],[\"lot\",245],[\"life\",244],[\"hahaha\",243],[\"zoom\",233],[\"start\",230],[\"dimitris\",229],[\"ya\",228],[\"wait\",224],[\"eat\",220],[\"fun\",218],[\"year\",217],[\"celina\",217],[\"super\",215],[\"watch\",215],[\"dont\",214],[\"tomorrow\",211],[\"em\",210],[\"sex\",209],[\"cool\",206],[\"guess\",202],[\"march\",201],[\"wow\",201],[\"left\",198],[\"real\",196],[\"set\",194],[\"hard\",193],[\"buy\",193],[\"years\",192],[\"high\",191],[\"yann\",190],[\"wine\",190],[\"pizza\",187],[\"ashley\",186],[\"app\",182],[\"working\",182],[\"times\",182],[\"stuff\",181],[\"dp\",181],[\"making\",181],[\"tonight\",180],[\"food\",179],[\"bed\",179],[\"person\",179],[\"pawsey\",178],[\"friday\",177],[\"drinking\",175],[\"game\",175],[\"cheese\",175],[\"house\",174],[\"yan\",174],[\"watching\",174]]";
+
+var width = window.innerWidth
+
+var scaleFactor = d3.scaleSqrt()
+  .domain([0, 2000])
+  .range([25, 10])
+
+console.log(scaleFactor(window.innerWidth));
 
 var words = JSON.parse(file).map(function(word) {
-  return { text: word[0], size: word[1] }
+  return { text: word[0], size: word[1] / scaleFactor(window.innerWidth + window.innerHeight) }
 });
 
 var max = d3.max(words.map(function(word) {
@@ -22,7 +30,7 @@ var layout = cloud()
   .words(words)
   .font("Impact, AvenirNext-Bold, sans-serif")
   .padding(3)
-  .fontSize(function(d) { return (d.size / 1.5); })
+  .fontSize(function(d) { return d.size; })
   .on("end", draw);
 
 layout.start();

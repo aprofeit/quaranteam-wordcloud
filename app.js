@@ -2,10 +2,18 @@ var d3 = require("d3");
 var cloud = require("d3-cloud");
 var fs = require("fs");
 
-var file = fs.readFileSync(__dirname + '/data/top_words.json', 'utf8');
+var file = fs.readFileSync(__dirname + '/data/messenger/top_words.json', 'utf8');
+
+var width = window.innerWidth
+
+var scaleFactor = d3.scaleSqrt()
+  .domain([0, 2000])
+  .range([25, 10])
+
+console.log(scaleFactor(window.innerWidth));
 
 var words = JSON.parse(file).map(function(word) {
-  return { text: word[0], size: word[1] }
+  return { text: word[0], size: word[1] / scaleFactor(window.innerWidth + window.innerHeight) }
 });
 
 var max = d3.max(words.map(function(word) {
@@ -21,7 +29,7 @@ var layout = cloud()
   .words(words)
   .font("Impact, AvenirNext-Bold, sans-serif")
   .padding(3)
-  .fontSize(function(d) { return (d.size / 1.5); })
+  .fontSize(function(d) { return d.size; })
   .on("end", draw);
 
 layout.start();

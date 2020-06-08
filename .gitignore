@@ -1,2 +1,3 @@
 .DS_Store
-data/message_*.json
+data/messenger/message_*.json
+data/telegram/messages.json
