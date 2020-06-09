@@ -6,16 +6,29 @@ const file = fs.readFileSync(__dirname + '/data/telegram/stonks/top_words.json',
 
 const drawCloud = function() {
   const rawWords = JSON.parse(file)
+  const windowArea = window.innerWidth * window.innerHeight
+
+  const minFontScale = d3.scaleLinear()
+    .domain([0, 1_296_000])
+    .range([8, 30])
+
+  const maxFontScale = d3.scaleLinear()
+    .domain([0, 1_296_000])
+    .range([30, 120])
+
+  const minFontSize = minFontScale(windowArea)
+  const maxFontSize = maxFontScale(windowArea)
 
   const sizeScale = d3.scaleLinear()
     .domain(d3.extent(rawWords.map(word => word[1])))
-    .range([30, 120])
+    .range([minFontScale(windowArea), maxFontScale(windowArea)])
 
   const colorScale = d3.scaleLinear()
-    .domain([30, 120])
+    .domain([minFontSize, maxFontSize])
     .range([0, 1])
 
   const words = rawWords.map(word => ({ text: word[0], size: sizeScale(word[1]) }))
+  console.log(words)
 
   const layout = cloud()
     .size([window.innerWidth, window.innerHeight])
