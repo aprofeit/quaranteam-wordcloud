@@ -11,3 +11,7 @@ When the data is present in `data/message_*.json`, the javascript bundle can be 
 # Example output
 
 ![Example output](https://github.com/aprofeit/quaranteam-wordcloud/raw/master/example/example.png)
+
+# Resizing example
+
+![Example resize](https://github.com/aprofeit/quaranteam-wordcloud/blob/master/example/resizing.gif?raw=true)
