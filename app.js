@@ -1,8 +1,8 @@
-const d3 = require('d3');
-const cloud = require('d3-cloud');
-const fs = require('fs');
+const d3 = require('d3')
+const cloud = require('d3-cloud')
+const fs = require('fs')
 
-const file = fs.readFileSync(__dirname + '/data/telegram/stonks/top_words.json', 'utf8');
+const file = fs.readFileSync(__dirname + '/data/telegram/stonks/top_words.json', 'utf8')
 const rawWords = JSON.parse(file)
 
 const drawCloud = function() {
@@ -35,12 +35,12 @@ const drawCloud = function() {
     .font('Impact, AvenirNext-Bold, sans-serif')
     .padding(1)
     .fontSize(d => d.size)
-    .on('end', draw);
+    .on('end', draw)
 
-  layout.start();
+  layout.start()
 
   function draw(words) {
-    d3.select('body').html('');
+    d3.select('body').html('')
     d3.select('body').append('svg')
       .attr('width', layout.size()[0])
       .attr('height', layout.size()[1])
@@ -54,9 +54,9 @@ const drawCloud = function() {
       .style('fill', d => d3.interpolateWarm(colorScale(d.size)))
       .attr('text-anchor', 'middle')
       .attr('transform', d => ('translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')'))
-      .text(d => d.text);
+      .text(d => d.text)
   }
 }
 
-drawCloud();
-window.addEventListener('resize', drawCloud);
+drawCloud()
+window.addEventListener('resize', drawCloud)
