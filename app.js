@@ -3,9 +3,9 @@ const cloud = require('d3-cloud');
 const fs = require('fs');
 
 const file = fs.readFileSync(__dirname + '/data/telegram/stonks/top_words.json', 'utf8');
+const rawWords = JSON.parse(file)
 
 const drawCloud = function() {
-  const rawWords = JSON.parse(file)
   const windowArea = window.innerWidth * window.innerHeight
 
   const minFontScale = d3.scaleLinear()
@@ -28,7 +28,6 @@ const drawCloud = function() {
     .range([0, 1])
 
   const words = rawWords.map(word => ({ text: word[0], size: sizeScale(word[1]) }))
-  console.log(words)
 
   const layout = cloud()
     .size([window.innerWidth, window.innerHeight])
