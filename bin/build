@@ -1,4 +1,0 @@
-#!/bin/zsh
-
-ruby transform.rb
-browserify -t brfs app.js > bundle.js
