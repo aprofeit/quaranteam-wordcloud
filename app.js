@@ -5,6 +5,9 @@ const fs = require('fs')
 const file = fs.readFileSync(__dirname + '/data/telegram/stonks/top_words.json', 'utf8')
 const rawWords = JSON.parse(file)
 
+const theme = 'interpolateWarm'
+const backgroundColor = 'black'
+
 const drawCloud = function() {
   const windowArea = window.innerWidth * window.innerHeight
 
@@ -40,7 +43,7 @@ const drawCloud = function() {
   layout.start()
 
   function draw(words) {
-    d3.select('body').html('')
+    d3.select('body').html('').style('background-color', backgroundColor)
     d3.select('body').append('svg')
       .attr('width', layout.size()[0])
       .attr('height', layout.size()[1])
@@ -51,7 +54,7 @@ const drawCloud = function() {
       .enter().append('text')
       .style('font-size', d => (d.size + 'px'))
       .style('font-family', 'Impact, AvenirNext-Bold, sans-serif')
-      .style('fill', d => d3.interpolateWarm(colorScale(d.size)))
+      .style('fill', d => d3[theme](colorScale(d.size)))
       .attr('text-anchor', 'middle')
       .attr('transform', d => ('translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')'))
       .text(d => d.text)
