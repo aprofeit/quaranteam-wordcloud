@@ -1,62 +1,71 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-var d3 = require("d3");
-var cloud = require("d3-cloud");
+const d3 = require('d3')
+const cloud = require('d3-cloud')
 
 
-var file = "[[\"lol\",1634],[\"good\",1155],[\"time\",976],[\"haha\",861],[\"fuck\",697],[\"yeah\",666],[\"people\",645],[\"chat\",640],[\"adam\",640],[\"day\",636],[\"shit\",545],[\"video\",535],[\"fucking\",484],[\"love\",481],[\"work\",478],[\"gonna\",465],[\"group\",407],[\"today\",402],[\"night\",394],[\"guys\",386],[\"kit\",376],[\"alexander\",375],[\"profeit\",368],[\"derek\",367],[\"yannis\",360],[\"great\",355],[\"beer\",342],[\"pretty\",323],[\"nice\",320],[\"feel\",308],[\"omg\",304],[\"hours\",303],[\"days\",303],[\"sheldon\",301],[\"alex\",291],[\"melo\",286],[\"bad\",284],[\"long\",281],[\"thought\",281],[\"steph\",280],[\"week\",275],[\"minister\",266],[\"joined\",265],[\"guy\",260],[\"man\",256],[\"big\",253],[\"emily\",250],[\"jeff\",248],[\"drink\",245],[\"lot\",245],[\"life\",244],[\"hahaha\",243],[\"zoom\",233],[\"start\",230],[\"dimitris\",229],[\"ya\",228],[\"wait\",224],[\"eat\",220],[\"fun\",218],[\"year\",217],[\"celina\",217],[\"super\",215],[\"watch\",215],[\"dont\",214],[\"tomorrow\",211],[\"em\",210],[\"sex\",209],[\"cool\",206],[\"guess\",202],[\"march\",201],[\"wow\",201],[\"left\",198],[\"real\",196],[\"set\",194],[\"hard\",193],[\"buy\",193],[\"years\",192],[\"high\",191],[\"yann\",190],[\"wine\",190],[\"pizza\",187],[\"ashley\",186],[\"app\",182],[\"working\",182],[\"times\",182],[\"stuff\",181],[\"dp\",181],[\"making\",181],[\"tonight\",180],[\"food\",179],[\"bed\",179],[\"person\",179],[\"pawsey\",178],[\"friday\",177],[\"drinking\",175],[\"game\",175],[\"cheese\",175],[\"house\",174],[\"yan\",174],[\"watching\",174]]";
+const file = "[[\"lol\",1634],[\"good\",1155],[\"time\",976],[\"haha\",861],[\"fuck\",697],[\"yeah\",666],[\"people\",645],[\"chat\",640],[\"adam\",640],[\"day\",636],[\"shit\",545],[\"video\",535],[\"fucking\",484],[\"love\",481],[\"work\",478],[\"gonna\",465],[\"group\",407],[\"today\",402],[\"night\",394],[\"guys\",386],[\"kit\",377],[\"alexander\",375],[\"profeit\",368],[\"derek\",367],[\"yannis\",360],[\"great\",355],[\"beer\",342],[\"pretty\",323],[\"nice\",320],[\"feel\",308],[\"omg\",304],[\"days\",303],[\"hours\",303],[\"sheldon\",301],[\"alex\",291],[\"melo\",286],[\"bad\",284],[\"thought\",281],[\"long\",281],[\"steph\",280],[\"week\",275],[\"minister\",266],[\"joined\",265],[\"guy\",260],[\"man\",256],[\"big\",253],[\"emily\",250],[\"jeff\",248],[\"lot\",245],[\"drink\",245],[\"life\",244],[\"hahaha\",243],[\"zoom\",233],[\"start\",230],[\"dimitris\",229],[\"ya\",228],[\"wait\",224],[\"eat\",220],[\"fun\",218],[\"year\",218],[\"celina\",217],[\"watch\",215],[\"super\",215],[\"dont\",214],[\"tomorrow\",211],[\"em\",210],[\"sex\",209],[\"cool\",206],[\"guess\",202],[\"march\",201],[\"wow\",201],[\"left\",198],[\"real\",196],[\"set\",194],[\"hard\",193],[\"buy\",193],[\"years\",192],[\"high\",191],[\"wine\",190],[\"yann\",190],[\"pizza\",187],[\"ashley\",186],[\"dp\",182],[\"working\",182],[\"times\",182],[\"app\",182],[\"stuff\",181],[\"making\",181],[\"tonight\",180],[\"food\",179],[\"bed\",179],[\"person\",179],[\"pawsey\",178],[\"friday\",177],[\"cheese\",175],[\"game\",175],[\"drinking\",175],[\"house\",174],[\"sounds\",174],[\"yan\",174]]"
+const rawWords = JSON.parse(file)
 
-let drawCloud = function() {
-  var width = window.innerWidth
+const theme = 'interpolateWarm'
+const backgroundColor = 'black'
 
-  var scaleFactor = d3.scaleSqrt()
-    .domain([0, 2000])
-    .range([25, 10])
+const drawCloud = function() {
+  const windowArea = window.innerWidth * window.innerHeight
 
-  var words = JSON.parse(file).map(function(word) {
-    return { text: word[0], size: word[1] / scaleFactor(window.innerWidth + window.innerHeight) }
-  });
+  const minFontScale = d3.scaleLinear()
+    .domain([0, 1_296_000])
+    .range([8, 30])
 
-  var max = d3.max(words.map(function(word) {
-    return word.size
-  }));
+  const maxFontScale = d3.scaleLinear()
+    .domain([0, 1_296_000])
+    .range([30, 120])
 
-  var min = d3.min(words.map(function(word) {
-    return word.size
-  }));
+  const minFontSize = minFontScale(windowArea)
+  const maxFontSize = maxFontScale(windowArea)
 
-  var layout = cloud()
+  const sizeScale = d3.scaleLinear()
+    .domain(d3.extent(rawWords.map(word => word[1])))
+    .range([minFontScale(windowArea), maxFontScale(windowArea)])
+
+  const colorScale = d3.scaleLinear()
+    .domain([minFontSize, maxFontSize])
+    .range([0, 1])
+
+  const words = rawWords.map(word => ({ text: word[0], size: sizeScale(word[1]) }))
+
+  const layout = cloud()
     .size([window.innerWidth, window.innerHeight])
     .words(words)
-    .font("Impact, AvenirNext-Bold, sans-serif")
-    .padding(3)
-    .fontSize(function(d) { return d.size; })
-    .on("end", draw);
+    .font('Impact, AvenirNext-Bold, sans-serif')
+    .padding(1)
+    .fontSize(d => d.size)
+    .on('end', draw)
 
-  layout.start();
+  layout.start()
 
   function draw(words) {
-    d3.select("body").html("");
-    d3.select("body").append("svg")
-      .attr("width", layout.size()[0])
-      .attr("height", layout.size()[1])
-      .append("g")
-      .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-      .selectAll("text")
+    d3.select('body')
+      .html('')
+      .style('background-color', backgroundColor)
+      .append('svg')
+      .attr('width', layout.size()[0])
+      .attr('height', layout.size()[1])
+      .append('g')
+      .attr('transform', 'translate(' + layout.size()[0] / 2 + ',' + layout.size()[1] / 2 + ')')
+      .selectAll('text')
       .data(words)
-      .enter().append("text")
-      .style("font-size", function(d) { return d.size + "px"; })
-      .style("font-family", "Impact, AvenirNext-Bold, sans-serif")
-      .style("fill", function(d) { return d3.interpolateWarm((d.size - min) / (max - min))})
-      .attr("text-anchor", "middle")
-      .attr("transform", function(d) {
-        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-      })
-      .text(function(d) { return d.text; });
+      .enter().append('text')
+      .style('font-size', d => (d.size + 'px'))
+      .style('font-family', 'Impact, AvenirNext-Bold, sans-serif')
+      .style('fill', d => d3[theme](colorScale(d.size)))
+      .attr('text-anchor', 'middle')
+      .attr('transform', d => ('translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')'))
+      .text(d => d.text)
   }
 }
 
-drawCloud();
-window.addEventListener('resize', drawCloud);
+drawCloud()
+window.addEventListener('resize', drawCloud)
 
 },{"d3":34,"d3-cloud":6}],2:[function(require,module,exports){
 // https://d3js.org/d3-array/ v1.2.4 Copyright 2018 Mike Bostock

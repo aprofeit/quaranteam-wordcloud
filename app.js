@@ -2,7 +2,7 @@ const d3 = require('d3')
 const cloud = require('d3-cloud')
 const fs = require('fs')
 
-const file = fs.readFileSync(__dirname + '/data/telegram/stonks/top_words.json', 'utf8')
+const file = fs.readFileSync(__dirname + '/data/messenger/quaranteam/top_words.json', 'utf8')
 const rawWords = JSON.parse(file)
 
 const theme = 'interpolateWarm'
